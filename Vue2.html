@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<body>
+    <div id="App">
+        {{msg}}
+        {{num}}
+        <div v-dis>
+            <ul>
+                <li v-for='(item,index) in list':key='index'>{{index}}{{item}}</li>
+            </ul>
+        </div>
+        <button @click='foo'>点击我</button>
+        <button @click='bar' v-dis='true'>别想点击我</button>
+        <div v-if='true'  v-dis>1111</div>
+        <div v-if='false'>22222</div>
+        <div v-show='false'>3333</div>
+        <div v-show='true' v-col>444</div>
+        <div v-if='f'>5555</div>
+        <div v-html='div'></div>
+        <div v-text='div'></div>
+        <div v-show='t'>6666</div>
+        <my-con :Chi='q' @getpar='par'></my-con>
+        <div><input type="text" v-model='text'></div>
+        <div>{{text}}</div>
+ 
+    </div>
+    <template id="myc">
+        <div>
+            <div>
+                我是外部组件
+            </div>
+            <div>{{Chi}}</div>
+            <button @click='PAR'>点击传父</button>
+        </div>
+    </template>
+
+
+    <template id="myb">
+        <div>
+            <div>
+                我是外部组件
+            </div>
+            <h4 @click='fun'>点击我给父级</h4>
+        </div>
+    </template>
+</body>
+<script>
+    // 自定义指令
+    Vue.directive('col',function(el){
+        el.style.color='red'
+    })
+    Vue.directive('dis',function(el,valU){
+        console.log(valU)
+        if(valU.expression == 'true'){
+            el.style.display='block'
+        }else{
+            el.style.display='none'
+
+        }
+    })
+    new Vue({
+        el:'#App'
+        ,data:{
+            msg:"你很好啊"
+            ,num:1
+            ,list:[1,2,3,4]
+            ,div:'<div>我很好</div>'
+            ,f:false
+            ,t:true
+            ,text:''
+            ,q:'我想明天'
+        }
+        ,methods: {
+            foo(){
+                console.log(22)
+            }
+            ,bar(){
+                this.msg='啥也不是，干'
+                this.num++
+                this.q='明天来了'
+            },
+            par(val){
+                console.log(val)
+            }
+        },
+        components:{
+            'my-com':{
+                template:'<div>我是要添加的</div>'
+            }
+            ,'my-con':{
+                template:'#myc',
+                props:['Chi'],
+                data() {
+                    return {
+                        msg:'你真帅'
+                    }
+                },
+                methods: {
+                    PAR(){
+                        console.log('我是子组件的东西啊')
+                    },
+                    fun(){
+                        this.$emit('getpar',this.msg)
+                    }
+            
+                },
+            },
+        },
+        watch: {
+            msg(val,oldVal){
+                if(val){
+                    console.log(val)
+                }
+            },
+            num(val){
+                if(val){
+                    console.log(val)
+                }
+            }
+        },
+        beforeCreate() {
+            console.log('我是实例创建前')
+        },
+        created() {
+            console.log('我是实例创建后')
+        },
+        beforeMount() {
+            console.log('我是实例完成前')
+        },
+        mounted() {
+            console.log('我是实例完成后')
+        },
+        beforeUpdate() {
+            console.log('我是实例修改前')
+        },
+        updated() {
+            console.log('我是实例修改后')
+        },
+        beforeDestroy() {
+            console.log('我是实例摧毁前')
+        },
+        destroyed() {
+            console.log('我是实例摧毁后')
+        },
+    })
+    // {{}} "" 获取动态变量
+    // el 定义根实例
+    // new Vue({}) 实例化vue对象
+    // data函数 定义初始数据
+    // methods 定义函数
+    // watch 监听方法 监听数据值的变化
+    // computed 计算属性 有缓存 用来定义需要多个值的结果,不断变化的值
+   
+    // vue的生命周期函数
+    // beforeCreate 实例创建前
+    // created 实例创建后
+
+    // beforeMount 实例完成前
+    // mounted 实例完成后
+
+    // beforeUpdate 实例修改前
+    // updated 实例修改后
+
+    // beforeDestroy 实例摧毁前
+    // destroyed 实例摧毁后
+
+    // components 组件化
+
+    // vue常用指令
+    // v-for 循环
+    // v-if/v-else/v-show 判断
+    // v-html 添加元素
+    // v-text 添加文本
+    // v-bind 动态变量 简写 :
+    // v-on 事件 简写 @
+    // v-model 双向绑定
+
+    // 组件传值
+    // 父传子 子组件通过 props接收 子组件上通过动态变量传值
+    // 子传父  子组件 自定义事件名 通过this.$emit()传值 父组件 通过事件名获取
+    // 组件传组件 创建一个公共的vue实例用来传值 $emit()传值 $on接收 自定义指令
+
+</script>
+</html>
